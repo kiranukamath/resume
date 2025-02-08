@@ -18,6 +18,7 @@
             height: 100%;
             overflow: hidden;
             font-family: Arial, sans-serif;
+            background: #f4f4f4;
         }
         .resume-container {
             width: 100%;
@@ -43,12 +44,11 @@
     </style>
     <script>
         function getResumeUrl() {
-            return window.location.origin + "/resume.pdf";
+            return "resume.pdf?" + new Date().getTime();
         }
         function setResume() {
             const pdfUrl = getResumeUrl();
-            const googleDocsUrl = `https://docs.google.com/gview?url=${pdfUrl}&embedded=true`;
-            document.getElementById("resume-viewer").src = googleDocsUrl;
+            document.getElementById("resume-viewer").src = pdfUrl;
             document.getElementById("download-link").href = pdfUrl;
         }
     </script>
@@ -56,5 +56,11 @@
 <body onload="setResume()">
     <a id="download-link" href="resume.pdf" class="download-btn" download>Download Resume</a>
     <iframe id="resume-viewer" class="resume-container"></iframe>
+    <script>
+        // If the PDF fails to load, open in a new tab
+        document.getElementById("resume-viewer").onerror = function () {
+            window.location.href = getResumeUrl();
+        };
+    </script>
 </body>
 </html>
