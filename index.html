@@ -22,6 +22,7 @@
         .resume-container {
             width: 100%;
             height: 100vh;
+            border: none;
         }
         .download-btn {
             position: absolute;
@@ -42,28 +43,18 @@
     </style>
     <script>
         function getResumeUrl() {
-            return "resume.pdf?" + new Date().getTime();  // Forces fresh PDF load
+            return window.location.origin + "/resume.pdf";
         }
         function setResume() {
             const pdfUrl = getResumeUrl();
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const viewer = document.getElementById("resume-viewer");
-
-            if (isMobile) {
-                viewer.innerHTML = `<iframe class="resume-container" src="https://docs.google.com/gview?url=${window.location.origin}/resume.pdf&embedded=true"></iframe>`;
-            } else {
-                viewer.innerHTML = `<object class="resume-container" type="application/pdf" data="${pdfUrl}">
-                    <p>Your browser does not support PDFs. <a href="resume.pdf">Download it here</a>.</p>
-                </object>`;
-            }
-
-            document.getElementById("download-link").setAttribute("href", "resume.pdf");
+            const googleDocsUrl = `https://docs.google.com/gview?url=${pdfUrl}&embedded=true`;
+            document.getElementById("resume-viewer").src = googleDocsUrl;
+            document.getElementById("download-link").href = pdfUrl;
         }
     </script>
 </head>
 <body onload="setResume()">
     <a id="download-link" href="resume.pdf" class="download-btn" download>Download Resume</a>
-    <div id="resume-viewer"></div>
+    <iframe id="resume-viewer" class="resume-container"></iframe>
 </body>
 </html>
-
